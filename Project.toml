@@ -3,6 +3,12 @@ uuid = "c61d977f-63e7-4325-8e5c-1b36ea2b3297"
 authors = ["Invenia Technical Computing Corporation"]
 version = "1.0.0-DEV"
 
+[deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+KernelFunctions = "ec8451be-7e33-11e9-00cf-bbf324bd1392"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
 [compat]
 julia = "1"
 

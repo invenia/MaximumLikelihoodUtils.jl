@@ -3,7 +3,7 @@ using LinearAlgebra
 using MaximumLikelihoodUtils
 
 df = 3.0;
-dim = 50;
+dim = 20;
 μ_true = randn(dim);
 S = randn(dim, dim);
 Σ_true = S * S' + 1e-6I;
@@ -13,4 +13,6 @@ X = rand(d_true, N);
 
 df_guess = 10.0;
 
-μ_em, Σ_em = fit_mle_tdist(X, df_guess; dims=2, verbose=true);
+μ_em, Σ_em = fit_mle_tdist_em(X, df_guess; dims=2, verbose=true);
+
+μ_gd, Σ_gd = fit_mle_tdist_graddesc(X, df_guess; dims=2, verbose=true);

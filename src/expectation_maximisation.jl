@@ -1,11 +1,4 @@
 
-function mvt_log_lik(df, loc, scale, X)
-    """ evaluate the log likelihood of the data under a multivariate-t distribution """
-    d = MvTDist(df, vec(loc), scale)
-    return mean(logpdf(d, X))
-end
-
-
 function set_ω(X, df, μ, Σ)
     """ E-step """
     d = size(X, 1)
@@ -28,7 +21,7 @@ function set_μ_Σ(X, ω, μ_old, Σ_old)
 end
 
 
-function fit_mle_tdist(X, df; dims=1, max_iters=1000, tol=1e-4, verbose=false)
+function fit_mle_tdist_em(X, df; dims=1, max_iters=1000, tol=1e-4, verbose=false)
     """ Maximum likelihood estimation (MLE) for the multivariate-t distribution using expectation-maximisation (EM) """
     @assert dims <= ndims(X)
     @assert dims <= 2

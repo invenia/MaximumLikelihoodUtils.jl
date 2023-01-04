@@ -65,15 +65,15 @@ function Distributions.fit_mle(
     Maximum likelihood estimation (MLE) for the multivariate-t distribution using expectation-maximisation (EM)
     Based on the MCECM algorithm given in Section 5 of https://www3.stat.sinica.edu.tw/statistica/oldpdf/a5n12.pdf
     """
-    # initialise parameters using the "method of moments":
+    # initialise parameters (location μ, scale Σ) using the "method of moments":
     _df = max(df, 2.1)
     if size(x, 1) > 1
         μ = mean(x, dims=2)
         Σ = PDMat(Hermitian(cov(x, dims=2, corrected=true) * (_df - 2.0) / _df + 1e-8I))
     else
         μ, σ = mean_and_std(x, corrected=true)
-        μ = reshape([μ], 1, 1)  # location
-        Σ = reshape([σ ^ 2 * (_df - 2.0) / _df], 1, 1)  # scale matrix
+        μ = reshape([μ], 1, 1)
+        Σ = reshape([σ ^ 2 * (_df - 2.0) / _df], 1, 1)
     end
     if verbose
         @printf("iter %2d, NLL: %1.4f \n", 0, -mvt_log_lik(df, μ, Σ, x))
@@ -86,7 +86,7 @@ function Distributions.fit_mle(
         ω = set_ω(x, df, μ, Σ)  # E-step
         μ, Σ = set_μ_Σ(x, ω, μ, Σ)  # M-step
         if learn_df
-            # ω = set_ω(x, df, μ, Σ)  # TODO: is this step needed? paper says so but doesn't seem to make a difference
+            # ω = set_ω(x, df, μ, Σ)  # TODO: paper includes this step, but is it needed?
             df = set_df(ω, size(x, 1); lb=df_lowerbound)  # CM-step
         end
         diff = mean(abs.(μ - μ_old)) + mean(abs.(Σ - Σ_old))

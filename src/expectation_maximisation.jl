@@ -28,9 +28,13 @@ function set_μ_Σ(X, ω, μ_old, Σ_old)
 end
 
 
-function set_df(ω, p)
+function set_df(ω, p; lb=0.01)
     """ CM-step """
-    return find_zero(df -> objective_df(df, ω, p), (0.01, 500.0), Bisection())
+    try
+        find_zero(df -> objective_df(df, ω, p), (lb, Inf), Bisection())
+    catch  # the bisection algorithm will fail if the solution lies below the lower bound
+        lb
+    end
 end
 
 
@@ -46,8 +50,17 @@ function objective_df(df, ω, p)
 end
 
 
-# TODO: do we want to extend Distributions.fit_mle or define a totally new method?
-function Distributions.fit_mle(D::Type{<:GenericMvTDist}, x::AbstractMatrix{Float64}; df=10.0, learn_df=true, max_iters=1000, tol=1e-4, verbose=false)
+# TODO: should probably define a new method rather than extending Distributions.fit_mle?
+function Distributions.fit_mle(
+    D::Type{<:GenericMvTDist},
+    x::AbstractMatrix{Float64};
+    df=10.0,
+    learn_df=true,
+    df_lowerbound=0.01,  # set to > 2 if you require the covariance to be defined
+    max_iters=1000,
+    tol=1e-4,
+    verbose=false
+)
     """
     Maximum likelihood estimation (MLE) for the multivariate-t distribution using expectation-maximisation (EM)
     Based on the MCECM algorithm given in Section 5 of https://www3.stat.sinica.edu.tw/statistica/oldpdf/a5n12.pdf
@@ -74,7 +87,7 @@ function Distributions.fit_mle(D::Type{<:GenericMvTDist}, x::AbstractMatrix{Floa
         μ, Σ = set_μ_Σ(x, ω, μ, Σ)  # M-step
         if learn_df
             # ω = set_ω(x, df, μ, Σ)  # TODO: is this step needed? paper says so but doesn't seem to make a difference
-            df = set_df(ω, size(x, 1))  # CM-step
+            df = set_df(ω, size(x, 1); lb=df_lowerbound)  # CM-step
         end
         diff = mean(abs.(μ - μ_old)) + mean(abs.(Σ - Σ_old))
         if verbose

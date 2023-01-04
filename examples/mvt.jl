@@ -13,6 +13,6 @@ X = rand(d_true, N);
 
 df_guess = 10.0;
 
-μ_em, Σ_em = fit_mle_tdist_em(X, df_guess; dims=2, verbose=true);
+d_em = fit_mle_tdist_em(X; df=df_guess, dims=2, verbose=true)
 
-μ_gd, Σ_gd = fit_mle_tdist_graddesc(X, df_guess; dims=2, verbose=true);
+d_gd = fit_mle_tdist_graddesc(X, df_guess; dims=2, verbose=true)

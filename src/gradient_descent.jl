@@ -38,5 +38,5 @@ function fit_mle_tdist_graddesc(X, df; dims=1, max_iters=1000, verbose=true)
     )
 
     θ_mle = unpack(res.minimizer)
-    return θ_mle.μ, θ_mle.Σ
+    return MvTDist(df, vec(θ_mle.μ), θ_mle.Σ)
 end

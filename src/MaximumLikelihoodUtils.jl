@@ -9,6 +9,8 @@ using LineSearches
 using Optim
 using ParameterHandling
 using Printf
+using Roots: find_zero, Bisection
+using SpecialFunctions: digamma
 using Zygote
 
 export fit_mle_tdist_em, fit_mle_tdist_graddesc

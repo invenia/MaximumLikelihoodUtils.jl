@@ -11,6 +11,4 @@ d_true = MvTDist(df, μ_true, Σ_true);
 N = 200;
 X = rand(d_true, N);
 
-df_guess = 10.0;
-
-d_em = fit_mle_tdist(X; df=df_guess, dims=2, verbose=true)
+d_em = fit_mle(MvTDist, X; verbose=true)

@@ -1,5 +1,5 @@
 using Distributions
-using Distributions: PDMat
+using Distributions: PDMat, Hermitian
 using LinearAlgebra
 using MaximumLikelihoodUtils
 using MaximumLikelihoodUtils: ColVecs
@@ -48,3 +48,6 @@ d_em = fit_mle(MvTDist, D)
 A_em = d_em.Σ[fdim+1:end, 1:fdim] / d_em.Σ[1:fdim, 1:fdim]
 b_em = d_em.μ[fdim+1:end] - A_em * d_em.μ[1:fdim]
 C_em = d_em.Σ[fdim+1:end, fdim+1:end] - A_em * d_em.Σ[1:fdim, fdim+1:end]
+
+# conditional model for prediction
+d_cond(x) = MvTDist(d_em.df, A_em * x + b_em, PDMat(Hermitian(C_em)))

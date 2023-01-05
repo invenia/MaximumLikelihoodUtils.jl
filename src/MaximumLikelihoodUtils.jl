@@ -1,7 +1,7 @@
 module MaximumLikelihoodUtils
 
 using Distributions
-using Distributions: Hermitian, PDMat, BLAS, invquad, GenericMvTDist
+using Distributions: BLAS, invquad, GenericMvTDist
 using KernelFunctions: RowVecs, ColVecs  # TODO: remove dependency on KernelFunctions
 using LinearAlgebra
 using Printf

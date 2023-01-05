@@ -43,7 +43,7 @@ D = vcat(ϕX, Y);
 # compute maximum likelihood solution
 d_em = fit_mle(MvTDist, D)
 
-# solve system of linear eqns to obtain model parameters (https://www.overleaf.com/project/6343ead19cfce1b523979b2e)
+# solve system of linear eqns to obtain model parameters
 A_em = d_em.Σ[fdim+1:end, 1:fdim] / d_em.Σ[1:fdim, 1:fdim]
 b_em = d_em.μ[fdim+1:end] - A_em * d_em.μ[1:fdim]
 C_em = d_em.Σ[fdim+1:end, fdim+1:end] - A_em * d_em.Σ[1:fdim, fdim+1:end]

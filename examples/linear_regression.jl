@@ -7,8 +7,9 @@ using MaximumLikelihoodUtils: ColVecs
 dim = 20;
 feat_dim = 10;
 # note: for polynomial regression (order > 1) the features are no longer multivariate-t
-# distributed. This leads us to generally underestimate the degrees of freedom parameter.
-polynomial_order = 3;
+# distributed (with shared degrees-of-freedom). This leads to poor performance and
+# underestimation of the degrees-of-freedom parameter.
+polynomial_order = 1;
 fdim = polynomial_order * feat_dim;
 
 # feature map for polynomial regression
